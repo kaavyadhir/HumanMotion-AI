@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment variables
+.env
+.env.local
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# VS Code
+.vscode/
+
+# Generated outputs
+backend/outputs/latest/*.gif
+backend/outputs/latest/*.npy
+backend/outputs/latest/*.json
+
+backend/outputs/history/*.gif
+backend/outputs/history/*.npy
+backend/outputs/history/*.json
+
+# Temporary files
+status.txt
+motion.gif
+
+# Pretrained model checkpoints
+checkpoints/
+
+eval_results/
