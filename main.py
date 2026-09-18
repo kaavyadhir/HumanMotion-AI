@@ -10,7 +10,7 @@ print("=" * 50)
 print("        Human Motion AI")
 print("=" * 50)
 
-MODEL_NAME = "HumanML3D Text-to-Motion"
+MODEL_NAME = "T2M (HumanML3D)"
 FPS = 20
 
 
