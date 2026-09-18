@@ -10,7 +10,7 @@ print("=" * 50)
 print("        Human Motion AI")
 print("=" * 50)
 
-MODEL_NAME = "HumanML3D Text-to-Motion"
+MODEL_NAME = "T2M (HumanML3D)"
 FPS = 20
 
 
@@ -32,7 +32,10 @@ def generate_motion(prompt):
     # ---------------------------------------
     # Run HumanML3D
     # ---------------------------------------
+    t_infer = time.time()
     result = subprocess.run(["python", "gen_motion_script.py"])
+    inference_time = round(time.time() - t_infer, 2)
+    print(f"\n>>> INFERENCE TIME: {inference_time}s")
 
     if result.returncode != 0:
         raise RuntimeError("Motion generation failed.")
@@ -83,7 +86,10 @@ def generate_motion(prompt):
     # ---------------------------------------
     print("\nRendering animation...\n")
 
+    t_render = time.time()
     result = subprocess.run(["python", "render_motion.py"])
+    render_time = round(time.time() - t_render, 2)
+    print(f"\n>>> RENDER TIME: {render_time}s")
 
     if result.returncode != 0:
         raise RuntimeError("Rendering failed.")
@@ -97,6 +103,8 @@ def generate_motion(prompt):
         "prompt": prompt,
         "frames": int(frames),
         "duration": duration,
+        "inference_time": inference_time,
+        "render_time": render_time,
         "generation_time": generation_time,
         "model": MODEL_NAME
     }
@@ -149,3 +157,5 @@ if __name__ == "__main__":
     print(f"Duration      : {result['metadata']['duration']} sec")
     print(f"Model         : {result['metadata']['model']}")
     print(f"Generation    : {result['metadata']['generation_time']} sec")
+    print(f"  Inference   : {result['metadata']['inference_time']} sec")
+    print(f"  Rendering   : {result['metadata']['render_time']} sec")
