@@ -249,11 +249,13 @@ Open **http://localhost:5173**
   "gif_url": "http://localhost:8000/outputs/latest/latest.gif",
   "npy_url": "http://localhost:8000/outputs/latest/latest.npy",
   "metadata_url": "http://localhost:8000/outputs/latest/metadata.json",
-  "metadata": {
+    "metadata": {
     "prompt": "A person walks forward and waves.",
     "frames": 120,
     "duration": 6.0,
-    "generation_time": 18.4,
+    "inference_time": 44.2,
+    "render_time": 8.1,
+    "generation_time": 52.3,
     "model": "T2M (HumanML3D)"
   }
 }
@@ -268,7 +270,7 @@ Documented honestly, with the intended fixes:
 | Limitation | Cause | Planned fix |
 |---|---|---|
 | **Not safe for concurrent users** | Prompt and outputs use fixed paths (`input.txt`, `outputs/latest/`), so simultaneous requests overwrite each other | Generate a UUID per request and write to `outputs/<uuid>/` |
-| **Slow generation (~15–60s)** | A new Python process is spawned per request, reloading the model from disk every time | Load the model once at FastAPI startup and keep it in memory |
+| **Slow generation (~48–62s)** | Measured: ~37s of each request is fixed model-loading overhead, not generation — a new Python process is spawned per request | Load the model once at FastAPI startup and keep it in memory (~48s → ~11s) |
 | **Windows-specific path** | `render_motion.py` uses a hardcoded backslash path | Use `os.path.join` |
 | **No request timeout** | The frontend `fetch` has no timeout or abort handling | Add `AbortController` with a timeout |
 | **CPU-only inference** | Configured for machines without a GPU | Make device selection configurable |
