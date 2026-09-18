@@ -275,6 +275,23 @@ Documented honestly, with the intended fixes:
 
 ---
 
+---
+
+# 📊 Performance
+
+Measured on CPU, with timing instrumented around each stage of the pipeline:
+
+| Prompt | Frames | Inference | Rendering | Total |
+|---|---|---|---|---|
+| "A person waves." | 80 | 41.8s | 6.2s | 48.0s |
+| "A person walks forward, turns around and sits down." | 192 | 48.5s | 13.0s | 61.5s |
+
+**Analysis:** 112 additional frames added only ~6.7s of inference, implying roughly 0.06s of actual generation per frame. This means approximately **37 seconds of every request is fixed startup cost** — spawning a new Python process, importing PyTorch, loading GloVe vectors and reading model checkpoints from disk — rather than motion generation itself.
+
+Rendering scales linearly with frame count at roughly 0.07s per frame.
+
+**Implication:** loading the model once at API startup instead of per request would reduce a typical request from ~48s to ~11s.
+
 # 🔮 Future Enhancements
 
 - ☁️ Cloud deployment
